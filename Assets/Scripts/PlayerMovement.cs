@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public InputSystem_Actions action;
     public Rigidbody2D rb;
-    int facingDirection = 1; // 1 = right, -1 = left
+    public int facingDirection = 1; // 1 = right, -1 = left
 
     public float speedMultiplier = 9f;
     public float acceleration = 40f;
