@@ -7,10 +7,19 @@ public class PlayerCombat : MonoBehaviour
 {
     private InputSystem_Actions action;
     public Rigidbody2D rb;
+
+    public float attackCooldown = 0.5f;
+    private float attackCooldownLeft = 0f;
+
+    public Transform attackPoint;
+    public Vector2 attackSize = new Vector2(1f, 0.5f);
+    public LayerMask enemyLayer;
+    public int attackDamage = 1;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        enemyLayer = LayerMask.GetMask("Enemy");
     }
 
     private void Awake()
@@ -30,12 +39,23 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnAttack(InputAction.CallbackContext context)
     {
-        Debug.Log("Attack! RAWR!");
+        if (attackCooldownLeft > 0f) return;
+        attackCooldownLeft = attackCooldown;
+        Collider2D[] hits = Physics2D.OverlapBoxAll(attackPoint.position, attackSize, 0f, enemyLayer);
+        foreach (Collider2D hit in hits)
+        {
+            //enemy take damage here hehe 
+            Debug.Log("hit " + hit.name);
+        }
+        Debug.Log("we dangerous cuh");
     }
 
     // Update is called once per frame
     void Update()
     {
-        //meow
+        if(attackCooldownLeft > 0)
+        {
+            attackCooldownLeft -= Time.deltaTime;
+        }
     }
 }
