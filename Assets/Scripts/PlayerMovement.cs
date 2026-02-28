@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float speedMultiplier = 9f;
     public float acceleration = 40f;
     public float deceleration = 200;
+    public float jumpForce = 20f;
     private void OnEnable()
     {
         action = new InputSystem_Actions();
@@ -21,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     }
 
     private void OnDisable()
