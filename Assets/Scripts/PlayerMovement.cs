@@ -4,14 +4,21 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 
 {
-    private InputSystem_Actions action;
-    private Rigidbody2D rb;
+    public InputSystem_Actions action;
+    public Rigidbody2D rb;
+
+    private void OnEnable()
+    {
+        action = new InputSystem_Actions();
+        action.Enable();
+        action.Player.Jump.performed += ctx => Jump();
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     private void OnDisable()
     {
-        action = new InputSystem_Actions();
-        action.Player.Jump.performed += ctx => Jump();
-        rb = GetComponent<Rigidbody2D>();
+        action.Disable();
+        action.Player.Jump.performed -= ctx => Jump();
     }
 
     private void Jump()
@@ -39,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 input = HandleInput();
-        rb.linearVelocity = input;
+        rb.linearVelocity += input;
+        Debug.Log(transform.position);
     }
 }
