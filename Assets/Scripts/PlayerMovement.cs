@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
         }
         float newSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, accelRate * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector2(newSpeed, rb.linearVelocity.y);
-        Debug.Log(IsGrounded());
+        //Debug.Log(IsGrounded());
     }
 
     bool IsGrounded()
