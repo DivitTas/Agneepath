@@ -28,7 +28,17 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 inputVector = action.Player.Move.ReadValue<Vector2>();
+        
+    }
 
+    Vector2 HandleInput()
+    {
+        return action.Player.Move.ReadValue<Vector2>();
+    }
+
+    private void FixedUpdate()
+    {
+        Vector2 input = HandleInput();
+        rb.linearVelocity = input;
     }
 }
