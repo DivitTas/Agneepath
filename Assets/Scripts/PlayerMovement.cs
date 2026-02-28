@@ -1,30 +1,35 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 
 {
     public InputSystem_Actions action;
     public Rigidbody2D rb;
-
+    public float speedMultiplier = 9f;
+    public float acceleration = 40f;
+    public float deceleration = 200;
     private void OnEnable()
     {
         action = new InputSystem_Actions();
         action.Enable();
-        action.Player.Jump.performed += ctx => Jump();
+        action.Player.Jump.performed += OnJump;
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnJump(InputAction.CallbackContext context)
+    {
+        throw new NotImplementedException();
     }
 
     private void OnDisable()
     {
         action.Disable();
-        action.Player.Jump.performed -= ctx => Jump();
+        action.Player.Jump.performed -= OnJump;
     }
 
-    private void Jump()
-    {
-        throw new NotImplementedException();
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,7 +51,24 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 input = HandleInput();
-        rb.linearVelocity += input;
-        Debug.Log(transform.position);
+        float targetSpeed = input.x * speedMultiplier;
+        float currentSpeed = rb.linearVelocity.x;
+        float accelRate;
+        // later implement logic to round speed to 9 if greater than 7.5 for controller stick drift adjustment
+        if (Mathf.Abs(targetSpeed) > 0.01f)
+        {
+            accelRate = deceleration;
+        }
+        else if (targetSpeed*currentSpeed<0)
+        {
+            accelRate = deceleration;
+        }
+        else
+        {
+            accelRate = acceleration;
+        }
+        float newSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, accelRate * Time.fixedDeltaTime);
+        rb.linearVelocity = new Vector2(newSpeed, rb.linearVelocity.y);
+        Debug.Log(rb.linearVelocity);
     }
 }
