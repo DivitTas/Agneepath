@@ -12,6 +12,10 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration = 40f;
     public float deceleration = 200;
     public float jumpForce = 20f;
+
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.1f;
+    public LayerMask groundLayer;
     private void OnEnable()
     {
         action = new InputSystem_Actions();
@@ -22,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if(IsGrounded()) rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     }
 
     private void OnDisable()
@@ -35,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        groundLayer = LayerMask.GetMask("Ground");
     }
 
     // Update is called once per frame
@@ -70,6 +74,11 @@ public class PlayerMovement : MonoBehaviour
         }
         float newSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, accelRate * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector2(newSpeed, rb.linearVelocity.y);
-        Debug.Log(rb.linearVelocity);
+        Debug.Log(IsGrounded());
+    }
+
+    bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 }
