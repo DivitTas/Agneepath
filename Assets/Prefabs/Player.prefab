@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2461935091057384986}
   - component: {fileID: 128137820864661690}
   - component: {fileID: 4095417310780992214}
+  - component: {fileID: -3147985230212303338}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -187,11 +188,11 @@ MonoBehaviour:
   rb: {fileID: 0}
   attackCooldown: 0.5
   attackPoint: {fileID: 7403109243048822574}
-  attackSize: {x: 3.57, y: 3.71}
+  attackSize: {x: 4.9, y: 3.71}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
-  attackDamage: 1
+  attackDamage: 2
 --- !u!114 &2461935091057384986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +369,19 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-3147985230212303338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514288619465293614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82dbb69b56361f84c8bcdeb2b7ea9671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  health: 5
 --- !u!1 &4038739423475226680
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,43 +1,44 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Boss : MonoBehaviour
 {
     public int health = 3;
     public AudioSource deathSound;
-    private SpriteRenderer sprite;
-    private Color originalColor;
-    public float flashDuration = 0.35f;
+    private Animator animator;
+    private Rigidbody2D rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         deathSound = GetComponent<AudioSource>();
-        sprite = GetComponentInChildren<SpriteRenderer>();
-        originalColor = sprite.color;
+        animator = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        deathSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Mathf.Abs(rb.linearVelocity.x) >= 0)
+        {
+            animator.SetBool("IsWalking", true);
+        }
+        else if (rb.linearVelocity.x == 0) 
+        { 
+            animator.SetBool("IsWalking", false);
+        }
     }
 
     public void TakeDamage(int damage)
     {
-        StartCoroutine(FlashRed());
         health -= damage;
         Debug.Log("Enemy took " + damage + " damage, remaining health: " + health);
+        animator.SetTrigger("Hit");
         if (health <= 0)
         {
             Die();
         }
-        
-    }
-    private System.Collections.IEnumerator FlashRed()
-    {
-        sprite.color = Color.red;
-        yield return new WaitForSeconds(flashDuration);
-        sprite.color = originalColor;
     }
 
     private void Die()
@@ -48,6 +49,7 @@ public class Enemy : MonoBehaviour
         {
             ai.enabled = false;
         }
-        Destroy(gameObject, 0.75f);
+        animator.SetTrigger("Die");
+        Destroy(gameObject, 1.75f);
     }
 }

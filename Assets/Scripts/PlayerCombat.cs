@@ -51,10 +51,15 @@ public class PlayerCombat : MonoBehaviour
         foreach (Collider2D hit in hits)
         {
             Debug.Log("hit " + hit.name);
-            Enemy enemy = hit.GetComponentInParent<Enemy>();
+            Enemy enemy = hit.GetComponent<Enemy>();
+            Boss boss = hit.GetComponent<Boss>();
             if (enemy != null)
             {
                 enemy.TakeDamage(attackDamage);
+            }
+            else if(boss != null)
+            {
+                boss.TakeDamage(attackDamage);
             }
             else
             {

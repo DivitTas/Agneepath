@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class BossAI : MonoBehaviour
 {
     private enum State
     {
@@ -115,18 +115,17 @@ public class EnemyAI : MonoBehaviour
         float direction = movingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
 
-        spriteRenderer.flipX = movingRight;
 
-        if (movingRight && transform.position.x >= rightPoint.position.x)
+        if (movingRight && rb.position.x >= rightPoint.position.x)
             movingRight = false;
 
-        if (!movingRight && transform.position.x <= leftPoint.position.x)
+        if (!movingRight && rb.position.x <= leftPoint.position.x)
             movingRight = true;
     }
 
     void DetectPlayer()
     {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position, detectionRadius, playerLayer);
+        Collider2D hit = Physics2D.OverlapCircle(rb.position, detectionRadius, playerLayer);
 
         if (hit != null)
         {
@@ -143,12 +142,11 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        float direction = player.position.x > transform.position.x ? 1f : -1f;
+        float direction = player.position.x > rb.position.x ? 1f : -1f;
 
         rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
 
-        spriteRenderer.flipX = direction > 0;
     }
 
-    
+
 }
