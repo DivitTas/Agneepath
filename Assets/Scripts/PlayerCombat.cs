@@ -7,6 +7,7 @@ public class PlayerCombat : MonoBehaviour
 {
     private InputSystem_Actions action;
     public Rigidbody2D rb;
+    private PlayerMovement playerMovement;
 
     public float attackCooldown = 0.5f;
     private float attackCooldownLeft = 0f;
@@ -15,6 +16,8 @@ public class PlayerCombat : MonoBehaviour
     public Vector2 attackSize = new Vector2(1f, 0.5f);
     public LayerMask enemyLayer;
     public int attackDamage = 1;
+    
+    private Animator animator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +29,8 @@ public class PlayerCombat : MonoBehaviour
     {
         action = new InputSystem_Actions();
         rb = GetComponent<Rigidbody2D>();
+        playerMovement = GetComponent<PlayerMovement>();
+        animator = GetComponent<Animator>();
     }
     private void OnEnable()
     {
@@ -40,14 +45,22 @@ public class PlayerCombat : MonoBehaviour
     private void OnAttack(InputAction.CallbackContext context)
     {
         if (attackCooldownLeft > 0f) return;
+        animator.SetTrigger("Attack");
         attackCooldownLeft = attackCooldown;
         Collider2D[] hits = Physics2D.OverlapBoxAll(attackPoint.position, attackSize, 0f, enemyLayer);
         foreach (Collider2D hit in hits)
         {
-            //enemy take damage here hehe 
             Debug.Log("hit " + hit.name);
+            Enemy enemy = hit.GetComponentInParent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(attackDamage);
+            }
+            else
+            {
+                Debug.LogWarning("Hit collider " + hit.name + " but no Enemy component found!");
+            }
         }
-        Debug.Log("we dangerous cuh");
     }
 
     // Update is called once per frame
@@ -57,5 +70,15 @@ public class PlayerCombat : MonoBehaviour
         {
             attackCooldownLeft -= Time.deltaTime;
         }
+        Vector3 localPos = attackPoint.localPosition;
+        localPos.x = Mathf.Abs(localPos.x) * playerMovement.facingDirection;
+        attackPoint.localPosition = localPos;
+    }
+    void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(attackPoint.position, attackSize);
     }
 }

@@ -26,11 +26,18 @@ public class PlayerMovement : MonoBehaviour
     private float dashTimeLeft;
     private float dashCooldownLeft;
     private float originalGravity;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
+    private TrailRenderer trailRenderer;
 
     private void Awake()
     {
         action = new InputSystem_Actions();
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        trailRenderer = GetComponent<TrailRenderer>();
     }
     private void OnEnable()
     {
@@ -50,11 +57,13 @@ public class PlayerMovement : MonoBehaviour
         dashCooldownLeft = dashCooldown;
         originalGravity = rb.gravityScale;
         rb.gravityScale = 0;
+        trailRenderer.emitting = true;
     }
     private void EndDash()
     {
         isDashing = false;
         rb.gravityScale = originalGravity;
+        trailRenderer.emitting = false;
     }
 
 
@@ -85,6 +94,11 @@ public class PlayerMovement : MonoBehaviour
         {
         dashCooldownLeft -= Time.deltaTime;
         }
+        if (Mathf.Abs(HandleInput().x) >= 0.01) { animator.SetBool("IsRunning", true); }
+        else
+        {
+            animator.SetBool("IsRunning", false);
+        }
     }
 
     Vector2 HandleInput()
@@ -97,9 +111,17 @@ public class PlayerMovement : MonoBehaviour
         
         Vector2 input = HandleInput();
         if (input.x > 0.01f)
+        {
             facingDirection = 1;
+            spriteRenderer.flipX = false;
+        }
+            
         else if (input.x < -0.01f)
+        {
             facingDirection = -1;
+            spriteRenderer.flipX = true;
+        }
+            
         if (isDashing)
         {
             rb.linearVelocity = new Vector2(facingDirection * dashSpeed, 0);
