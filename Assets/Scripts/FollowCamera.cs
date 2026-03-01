@@ -23,4 +23,12 @@ public class FollowCamera : MonoBehaviour
             cinemachineFollow.Follow = player.transform;
         }
     }
+
+    public void AssignPlayer(GameObject playerObj)
+    {
+        if (playerObj != null)
+        {
+            cinemachineFollow.Follow = playerObj.transform;
+        }
+    }
 }

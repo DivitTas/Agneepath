@@ -1,11 +1,13 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour
 {
     public int health = 3;
     public AudioSource deathSound;
+    public string gameOverSceneName = "GameOver";
     private Animator animator;
     private Rigidbody2D rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,12 +46,21 @@ public class Boss : MonoBehaviour
     private void Die()
     {
         if (deathSound != null) { deathSound.Play(); }
-        EnemyAI ai = GetComponent<EnemyAI>();
+        BossAI ai = GetComponent<BossAI>();
         if (ai != null)
         {
             ai.enabled = false;
         }
         animator.SetTrigger("Die");
+        Invoke("LoadGameOver", 1.75f);
         Destroy(gameObject, 1.75f);
+    }
+
+    void LoadGameOver()
+    {
+        if (!string.IsNullOrEmpty(gameOverSceneName))
+        {
+            SceneManager.LoadScene(gameOverSceneName);
+        }
     }
 }
