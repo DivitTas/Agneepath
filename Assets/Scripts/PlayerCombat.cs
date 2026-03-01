@@ -13,7 +13,7 @@ public class PlayerCombat : MonoBehaviour
     private float attackCooldownLeft = 0f;
 
     public Transform attackPoint;
-    public Vector2 attackSize = new Vector2(1f, 0.5f);
+    public Vector2 attackSize = new Vector2(3.6f, 3.7f);
     public LayerMask enemyLayer;
     public int attackDamage = 1;
     

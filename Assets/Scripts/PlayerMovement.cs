@@ -10,16 +10,16 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     public int facingDirection = 1; // 1 = right, -1 = left
 
-    public float speedMultiplier = 9f;
-    public float acceleration = 40f;
+    public float speedMultiplier = 16f;
+    public float acceleration = 50f;
     public float deceleration = 200;
 
-    public float jumpForce = 20f;
+    public float jumpForce = 17f;
     public Transform groundCheck;
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
 
-    public float dashSpeed = 20f;
+    public float dashSpeed = 25f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
     private bool isDashing;
