@@ -15,7 +15,7 @@ public class FollowCamera : MonoBehaviour
         AssignPlayer();
     }
 
-    void AssignPlayer()
+    public void AssignPlayer()
     {
         PlayerMovement player = FindAnyObjectByType<PlayerMovement>();
         if (player != null)
